@@ -4,8 +4,7 @@ TriviaQuest is managed and developed by Simon_Flash. For inquiries, please e-mai
 Dislaimer: This plugin has only been public for a short period of time, and as such may contain unexpected bugs. _Use this plugin at your own risk!_
 
 ## Important Resources
-[Sponge Thread](https://forums.spongepowered.org/t/cmdcalendar-calendar-automatic-command-scheduler-wip-beta/17735)
-
+[Sponge Thread](https://forums.spongepowered.org/t/cmdcalendar-calendar-automatic-command-scheduler-wip-beta/17735)  
 [GitHub](https://github.com/SimonFlash/TriviaQuest)
 
 ## TriviaQuest 101
@@ -18,39 +17,43 @@ Note: Players must have the permission `triviaquest.answer` for their answers to
 ## Command Documentation
 TriviaQuest's commands are fully documented in-game and accessible using `/Trivia`. For setting up the config, see Configuration.
 
-`/Trivia`: Opens the in-game command documentation
-`/Trivia Answer <Value>`: Answers a trivia question with `Value`
-`/Trivia Post`: Posts a new trivia question to chat
-`/Trivia Start`: Activates the integrated trivia runner*
-`/Trivia Stop`: Halts the integrated trivia runner*
+`/Trivia`: Opens the in-game command documentation  
+`/Trivia Answer <Value>`: Answers a trivia question with `Value`  
+`/Trivia Post`: Posts a new trivia question to chat  
+`/Trivia Start`: Activates the integrated trivia runner*  
+`/Trivia Stop`: Halts the integrated trivia runner*  
 
 *Want more control over when TriviaQuest asks questions? Download CmdCalendar [here](https://github.com/SimonFlash/CmdCalendar).
 
 ## Configuration
-The config file contains three primary sections - Settings, TriviaRewards, and TriviaQuestions. Each section, along with temporary values, is generated upon installing TriviaQuest. A copy of the default config file can be found below.
+The config file contains three primary sections - config, rewards, and trivia. Each section, along with temporary values, is generated upon installing TriviaQuest. A copy of the default config file can be found below.
 
 ```
-Settings {
+config {
     # List of enabled Trivia Packs, separated by ", " #
-    enabledPacks="Pack1, Pack2"
-    # Interval between trivia questions (seconds) #
-    triviaInterval=60
-    # Length of each trivia question (seconds) #
-    triviaLength=30
+    enabled_packs="pack_A, pack_B"
+    # Interval between trivia questions - in seconds #
+    trivia_interval=60
+    # Length of each trivia question - in seconds #
+    trivia_length=30
+    # Prefix before TriviaQuest messages - space included #
+    trivia_prefix="&8[&5TriviaQuest&8] "
 }
-TriviaRewards {
+rewards {
     # Rewards are commands chosen randomly - use {player} for the players name #
-    reward1="command1"
-    reward2="command2"
+    reward_1="command1"
+    reward_2="command2"
 }
-TriviaQuestions {
-    Pack1 {
-        question1="{Question1},{Answer1}"
-        question2="{Question2},{Answer2}"
+trivia {
+    # Packs should contain related questions and can be enabled/disabled above - names must be unique #
+    pack_A {
+        # Question names are for your benefit, but must be unique #
+        question_1="(Question1),(Answer1)"
+        question_2="(Question2),(Answer1),(Answer2)"
     }
-    Pack2 {
-        question3="{Question3},{Answer3}"
-        question4="{Question4},{Answer4}"
+    pack_B {
+        question_3="(Question3),(Answer1)"
+        question_4="(Question4),(Answer1),(Answer2)"
     }
 }
 ```
@@ -62,10 +65,9 @@ This section contains a list of planned upcoming features for a future version o
 
 + User created questions
 + Player scoreboard tracking
-+ Accept multiple player's answers
 + Advanced answer control (will require a leading term in answers)
 
-## <div style="text-align: center">Issue Reports</div>
+## Issue Reports
 This section contains a list of all known bugs and issues in the most recent version of TriviaQuest. Bugs are non-intended errors that exist in the code, while issues are features that do not exist. A feature intended to be implemented into future versions is suffixed [Soon™]. Features will be added in order of importance and simplicity, and pushing for a new release will not help your cause.
 
 + No issues are currently known! How long will that last...
