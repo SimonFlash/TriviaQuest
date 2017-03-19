@@ -1,10 +1,12 @@
 # TriviaQuest: In-Game Trivia Questions
 TriviaQuest is managed and developed by Simon_Flash. For inquiries, please e-mail me at mcsimonflash@gmail.com
 
+Latest Version: v1.1.1
+
 Dislaimer: This plugin has only been public for a short period of time, and as such may contain unexpected bugs. _Use this plugin at your own risk!_
 
 ## Important Resources
-[Sponge Thread](https://forums.spongepowered.org/t/cmdcalendar-calendar-automatic-command-scheduler-wip-beta/17735)  
+[Sponge Thread](https://forums.spongepowered.org/t/triviaquest-question-in-game-trivia-questions-v1-1-1/18051)  
 [GitHub](https://github.com/SimonFlash/TriviaQuest)
 
 ## TriviaQuest 101
@@ -17,11 +19,11 @@ Note: Players must have the permission `triviaquest.answer` for their answers to
 ## Command Documentation
 TriviaQuest's commands are fully documented in-game and accessible using `/Trivia`. For setting up the config, see Configuration.
 
-`/Trivia`: Opens the in-game command documentation  
-`/Trivia Answer <Value>`: Answers a trivia question with `Value`  
-`/Trivia Post`: Posts a new trivia question to chat  
-`/Trivia Start`: Activates the integrated trivia runner*  
-`/Trivia Stop`: Halts the integrated trivia runner*  
+`/Trivia`: Opens the in-game command documentation | `triviaquest`  
+`/Trivia Answer <Value>`: Answers a trivia question with `Value` | `triviaquest.answer`  
+`/Trivia Post`: Posts a new trivia question to chat | `triviaquest.post`  
+`/Trivia Start`: Activates the integrated trivia runner* | `triviaquest.run.start`  
+`/Trivia Stop`: Halts the integrated trivia runner* | `triviaquest.run.stop`  
 
 *Want more control over when TriviaQuest asks questions? Download CmdCalendar [here](https://github.com/SimonFlash/CmdCalendar).
 
@@ -41,8 +43,8 @@ config {
 }
 rewards {
     # Rewards are commands chosen randomly - use {player} for the players name #
-    reward_1="command1"
-    reward_2="command2"
+    reward_1="give {player} diamond"
+    reward_2="/say TriviaQuest is awesome!"
 }
 trivia {
     # Packs should contain related questions and can be enabled/disabled above - names must be unique #
@@ -60,8 +62,14 @@ trivia {
 
 Note: The config is JSON based, and as such follows JSON formatting. Attempting to use certain characters in the question or answer, such as the doublequote ("), could cause issues with TriviaQuest. Instead, use the backslash (\) to escape characters.
 
+## Trivia Packs
+
+TriviaQuest is special in that it allows for the use of trivia packs, or groups of questions, in the config. These packs can be enabled/disabled with ease by adding/removing the pack name from `enabled_packs=`.
+
+A list of downloadable trivia packs is planned to be implemented here, however there aren't any packs available to download :(. If you'd like to submit a trivia pack, please send me an email at `mcsimonflash@gmail.com`.
+
 ## Upcoming Features
-This section contains a list of planned upcoming features for a future version of CmdCalendar. If you would like to suggest a feature, visit the CmdCalendar Sponge thread (above) or send me an e-mail (also above). Asking for features will be added in order of importance and simplicity, and pushing for a new release will not help your cause. These releases are only planned; there is no guarantee what version they will be implemented in.
+This section contains a list of planned upcoming features for a future version of TriviaQuest. If you would like to suggest a feature, visit the TriviaQuest Sponge thread (above) or send me an e-mail (also above). Features will be added in order of importance and simplicity, and pushing for a new release will not help your cause. These releases are only planned; there is no guarantee what version they will be implemented in.
 
 + User created questions
 + Player scoreboard tracking
