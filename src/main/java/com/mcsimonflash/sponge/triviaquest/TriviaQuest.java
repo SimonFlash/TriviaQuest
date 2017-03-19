@@ -24,7 +24,7 @@ import org.spongepowered.api.text.Text;
 
 import java.nio.file.Path;
 
-@Plugin(id = "triviaquest", name = "TriviaQuest", version = "mc1.10.2-v1.1.0", description = "In-Game Trivia Questions - Developed by Simon_Flash")
+@Plugin(id = "triviaquest", name = "TriviaQuest", version = "mc1.10.2-v1.1.1", description = "In-Game Trivia Questions - Developed by Simon_Flash")
 public class TriviaQuest {
 
     private static TriviaQuest plugin;
@@ -50,7 +50,7 @@ public class TriviaQuest {
         plugin = this;
 
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
-        getLogger().info("|     TriviaQuest - Version 1.1.0     |");
+        getLogger().info("|     TriviaQuest - Version 1.1.1     |");
         getLogger().info("|      Developed by: Simon_Flash      |");
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
 

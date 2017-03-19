@@ -32,7 +32,7 @@ public class RunTrivia {
         runnerTask = Task.builder().execute(
                 task -> askQuestion())
                 .name("triviaTask")
-                .delay(1, TimeUnit.SECONDS)
+                .delay(Config.getTriviaInterval(), TimeUnit.SECONDS)
                 .interval(Config.getTriviaInterval(), TimeUnit.SECONDS)
                 .submit(TriviaQuest.getPlugin());
     }
@@ -85,7 +85,7 @@ public class RunTrivia {
             if (src instanceof Player) {
                 sourceName = src.getName();
                 rewardMsg = Text.of(Config.getTriviaPrefix(),
-                        TextColors.WHITE, "Nice job! Here's you reward!");
+                        TextColors.WHITE, "Nice job! Here's your reward!");
                 String triviaReward = Config.getTriviaReward();
                 triviaReward = triviaReward.replaceAll("\\{player}", src.getName());
                 Sponge.getCommandManager().process(Sponge.getServer().getConsole(), triviaReward);

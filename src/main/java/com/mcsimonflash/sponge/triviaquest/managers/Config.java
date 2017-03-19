@@ -80,7 +80,6 @@ public class Config {
                     if (quesAnsList.size() < 2) {
                         TriviaQuest.getPlugin().getLogger().error("trivia " + triviaPack + " " + packQuestion + " configured improperly!");
                     } else {
-                        TriviaQuest.getPlugin().getLogger().info("Adding " + String.join(", ", quesAnsList));
                         RunTrivia.getTriviaList().add(new TriviaQuestion(quesAnsList));
                     }
                 }
