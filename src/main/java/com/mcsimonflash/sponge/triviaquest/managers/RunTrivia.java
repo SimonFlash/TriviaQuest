@@ -47,6 +47,7 @@ public class RunTrivia {
     }
 
     public static void nextQuestion() {
+        TriviaQuest.getPlugin().getLogger().info("In nextQuestion; triviaList size: " + triviaList.size());
         triviaQuestion = triviaList.get(triviaIndex++);
         if (triviaIndex == triviaList.size()) {
             triviaIndex = 0;
@@ -55,48 +56,66 @@ public class RunTrivia {
     }
 
     public static void askQuestion() {
-        nextQuestion();
-        Sponge.getServer().getBroadcastChannel().send(Text.of(TextColors.DARK_GRAY, "[", TextColors.DARK_PURPLE, "TriviaQuest", TextColors.DARK_GRAY, "] ",
-                TextColors.WHITE, triviaQuestion.getQuestion()));
-        triviaTask = Task.builder().execute(new TriviaTask())
-                .name("triviaTask")
-                .delay(0, TimeUnit.SECONDS)
-                .interval(1, TimeUnit.SECONDS)
-                .submit(TriviaQuest.getPlugin());
+        if (isTriviaActive()) {
+            TriviaQuest.getPlugin().getLogger().info("Attempted to auto-run trivia, but question was active!");
+        } else {
+            nextQuestion();
+            Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
+                    TextColors.WHITE, triviaQuestion.getQuestion()));
+            triviaTask = Task.builder().execute(new TriviaTask())
+                    .name("triviaTask")
+                    .delay(0, TimeUnit.SECONDS)
+                    .interval(1, TimeUnit.SECONDS)
+                    .submit(TriviaQuest.getPlugin());
+        }
     }
 
     public static boolean checkAnswer(CommandSource src, String playerAnswer) {
-        if (playerAnswer.equalsIgnoreCase(triviaQuestion.getAnswer())) {
-            RunTrivia.endQuestion(src);
+        boolean correctAnswer = false;
+        for (String ans : triviaQuestion.getAnswer()) {
+            if (playerAnswer.equalsIgnoreCase(ans)) {
+                correctAnswer = true;
+                break;
+            }
+        }
+
+        if (correctAnswer) {
+            String sourceName;
+            Text rewardMsg;
             if (src instanceof Player) {
-                src.sendMessage(Text.of(TextColors.DARK_GRAY, "[", TextColors.DARK_PURPLE, "TriviaQuest", TextColors.DARK_GRAY, "] ",
-                        TextColors.WHITE, "Nice job! Here's you reward!"));
+                sourceName = src.getName();
+                rewardMsg = Text.of(Config.getTriviaPrefix(),
+                        TextColors.WHITE, "Nice job! Here's you reward!");
                 String triviaReward = Config.getTriviaReward();
                 triviaReward = triviaReward.replaceAll("\\{player}", src.getName());
                 Sponge.getCommandManager().process(Sponge.getServer().getConsole(), triviaReward);
+            } else if (src instanceof ConsoleSource){
+                sourceName = ("GLaDOS");
+                rewardMsg = Text.of(Config.getTriviaPrefix(),
+                        TextColors.WHITE, "Aww, I can't give you a reward :(");
             } else {
-                src.sendMessage(Text.of(TextColors.DARK_GRAY, "[", TextColors.DARK_PURPLE, "TriviaQuest", TextColors.DARK_GRAY, "] ",
-                        TextColors.WHITE, "Aww, I can't give you a reward :("));
+                sourceName = ("The Companion Cube");
+                rewardMsg = Text.of(TextColors.DARK_RED, "I will find you, and I will kill you.");
             }
+
+            if (triviaQuestion.getAnswer().size() < 2) {
+                Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
+                        TextColors.LIGHT_PURPLE, sourceName, TextColors.WHITE, " got it! The answer is ", TextColors.LIGHT_PURPLE, triviaQuestion.getAnswer()));
+            } else {
+                Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
+                        TextColors.LIGHT_PURPLE, sourceName, TextColors.WHITE, " got it! The answers were ", TextColors.LIGHT_PURPLE, String.join(", ", triviaQuestion.getAnswer()), "!"));
+            }
+            src.sendMessage(rewardMsg);
+            RunTrivia.endQuestion();
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
-    public static void endQuestion(CommandSource src) {
-        String sourceName;
-        if (src instanceof Player) {
-            sourceName = src.getName();
-        } else if (src instanceof ConsoleSource) {
-            sourceName = ("The Overlord");
-        } else {
-            sourceName = ("A ninja");
-        }
-
+    public static void endQuestion() {
         triviaTask.cancel();
         removeTriviaQuestion();
-        Sponge.getServer().getBroadcastChannel().send(Text.of(TextColors.DARK_GRAY, "[", TextColors.DARK_PURPLE, "TriviaQuest", TextColors.DARK_GRAY, "] ",
-                TextColors.LIGHT_PURPLE, sourceName, TextColors.WHITE, " got it! The answer is ", TextColors.LIGHT_PURPLE, triviaQuestion.getAnswer()));
     }
 
     public static boolean isRunnerActive() {

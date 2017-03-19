@@ -1,5 +1,6 @@
 package com.mcsimonflash.sponge.triviaquest.commands;
 
+import com.mcsimonflash.sponge.triviaquest.managers.Config;
 import com.mcsimonflash.sponge.triviaquest.managers.RunTrivia;
 
 import org.spongepowered.api.command.CommandException;
@@ -17,12 +18,12 @@ public class AnswerTrivia implements CommandExecutor {
         String playerAnswer = args.<String>getOne("playerAnswer").get();
 
         if (RunTrivia.isTriviaActive()) {
-            src.sendMessage(Text.of(TextColors.DARK_GRAY, "[", TextColors.DARK_PURPLE, "TriviaQuest", TextColors.DARK_GRAY, "] ",
+            src.sendMessage(Text.of(Config.getTriviaPrefix(),
                     TextColors.WHITE, "Oh no! There isn't an active question!"));
+            return CommandResult.empty();
         } else {
             RunTrivia.checkAnswer(src, playerAnswer);
+            return CommandResult.success();
         }
-
-        return CommandResult.success();
     }
 }

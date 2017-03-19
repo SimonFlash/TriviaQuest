@@ -18,8 +18,7 @@ public class TriviaTask implements Consumer<Task> {
     public void accept(Task task) {
         seconds--;
         if (seconds < 1) {
-            Sponge.getServer().getBroadcastChannel().send(Text.of(
-                    TextColors.DARK_GRAY, "[", TextColors.DARK_PURPLE, "TriviaQuest", TextColors.DARK_GRAY, "] ",
+            Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
                     TextColors.WHITE, "No one answered in time! The answer is ", TextColors.LIGHT_PURPLE, RunTrivia.getTriviaQuestion().getAnswer(), "!"));
             task.cancel();
             RunTrivia.removeTriviaQuestion();

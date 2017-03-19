@@ -1,5 +1,6 @@
 package com.mcsimonflash.sponge.triviaquest.commands;
 
+import com.mcsimonflash.sponge.triviaquest.managers.Config;
 import com.mcsimonflash.sponge.triviaquest.managers.RunTrivia;
 
 import org.spongepowered.api.command.CommandException;
@@ -15,12 +16,12 @@ public class PostTrivia implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         if (RunTrivia.isTriviaActive()) {
-            src.sendMessage(Text.of(TextColors.DARK_GRAY, "[", TextColors.DARK_PURPLE, "TriviaQuest", TextColors.DARK_GRAY, "] ",
+            src.sendMessage(Text.of(Config.getTriviaPrefix(),
                     TextColors.WHITE, "There's already a trivia running!"));
+            return CommandResult.empty();
         } else {
             RunTrivia.askQuestion();
+            return CommandResult.success();
         }
-
-        return CommandResult.success();
     }
 }
