@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.mcsimonflash.sponge.triviaquest.TriviaQuest;
 import com.mcsimonflash.sponge.triviaquest.objects.TriviaQuestion;
 import com.mcsimonflash.sponge.triviaquest.objects.TriviaTask;
-
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.source.ConsoleSource;
@@ -13,12 +12,11 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class RunTrivia {
+public class Trivia {
 
     private static Task runnerTask;
     private static Task triviaTask;
@@ -32,7 +30,7 @@ public class RunTrivia {
         runnerTask = Task.builder().execute(
                 task -> askQuestion())
                 .name("triviaTask")
-                .delay(Config.getTriviaInterval(), TimeUnit.SECONDS)
+                .delay(0, TimeUnit.SECONDS)
                 .interval(Config.getTriviaInterval(), TimeUnit.SECONDS)
                 .submit(TriviaQuest.getPlugin());
     }
@@ -47,7 +45,6 @@ public class RunTrivia {
     }
 
     public static void nextQuestion() {
-        TriviaQuest.getPlugin().getLogger().info("In nextQuestion; triviaList size: " + triviaList.size());
         triviaQuestion = triviaList.get(triviaIndex++);
         if (triviaIndex == triviaList.size()) {
             triviaIndex = 0;
@@ -56,9 +53,7 @@ public class RunTrivia {
     }
 
     public static void askQuestion() {
-        if (isTriviaActive()) {
-            TriviaQuest.getPlugin().getLogger().info("Attempted to auto-run trivia, but question was active!");
-        } else {
+        if (!isTriviaActive()) {
             nextQuestion();
             Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
                     TextColors.WHITE, triviaQuestion.getQuestion()));
@@ -78,7 +73,6 @@ public class RunTrivia {
                 break;
             }
         }
-
         if (correctAnswer) {
             String sourceName;
             Text rewardMsg;
@@ -86,9 +80,10 @@ public class RunTrivia {
                 sourceName = src.getName();
                 rewardMsg = Text.of(Config.getTriviaPrefix(),
                         TextColors.WHITE, "Nice job! Here's your reward!");
-                String triviaReward = Config.getTriviaReward();
-                triviaReward = triviaReward.replaceAll("\\{player}", src.getName());
-                Sponge.getCommandManager().process(Sponge.getServer().getConsole(), triviaReward);
+                String rewardCmd = Config.getTriviaReward();
+                if (rewardCmd != null) {
+                    Sponge.getCommandManager().process(Sponge.getServer().getConsole(), rewardCmd.replaceAll("\\{player}", src.getName()));
+                }
             } else if (src instanceof ConsoleSource){
                 sourceName = ("GLaDOS");
                 rewardMsg = Text.of(Config.getTriviaPrefix(),
@@ -97,16 +92,15 @@ public class RunTrivia {
                 sourceName = ("The Companion Cube");
                 rewardMsg = Text.of(TextColors.DARK_RED, "I will find you, and I will kill you.");
             }
-
             if (triviaQuestion.getAnswer().size() < 2) {
                 Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
                         TextColors.LIGHT_PURPLE, sourceName, TextColors.WHITE, " got it! The answer is ", TextColors.LIGHT_PURPLE, triviaQuestion.getAnswer()));
             } else {
                 Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
-                        TextColors.LIGHT_PURPLE, sourceName, TextColors.WHITE, " got it! The answers were ", TextColors.LIGHT_PURPLE, String.join(", ", triviaQuestion.getAnswer()), "!"));
+                        TextColors.LIGHT_PURPLE, sourceName, TextColors.WHITE, " got it! The answers are ", TextColors.LIGHT_PURPLE, String.join(", ", triviaQuestion.getAnswer()), "!"));
             }
             src.sendMessage(rewardMsg);
-            RunTrivia.endQuestion();
+            Trivia.endQuestion();
             return true;
         } else {
             return false;

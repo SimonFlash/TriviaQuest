@@ -1,7 +1,7 @@
 package com.mcsimonflash.sponge.triviaquest.objects;
 
 import com.mcsimonflash.sponge.triviaquest.managers.Config;
-import com.mcsimonflash.sponge.triviaquest.managers.RunTrivia;
+import com.mcsimonflash.sponge.triviaquest.managers.Trivia;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.scheduler.Task;
@@ -19,9 +19,9 @@ public class TriviaTask implements Consumer<Task> {
         seconds--;
         if (seconds < 1) {
             Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
-                    TextColors.WHITE, "No one answered in time! The answer is ", TextColors.LIGHT_PURPLE, RunTrivia.getTriviaQuestion().getAnswer(), "!"));
+                    TextColors.WHITE, "No one answered in time! The answer was ", TextColors.LIGHT_PURPLE, Trivia.getTriviaQuestion().getAnswer(), "!"));
             task.cancel();
-            RunTrivia.removeTriviaQuestion();
+            Trivia.removeTriviaQuestion();
         }
     }
 }

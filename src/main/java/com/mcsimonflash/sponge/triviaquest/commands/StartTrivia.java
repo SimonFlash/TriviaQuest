@@ -1,6 +1,6 @@
 package com.mcsimonflash.sponge.triviaquest.commands;
 
-import com.mcsimonflash.sponge.triviaquest.managers.RunTrivia;
+import com.mcsimonflash.sponge.triviaquest.managers.Trivia;
 import com.mcsimonflash.sponge.triviaquest.managers.Config;
 
 import org.spongepowered.api.Sponge;
@@ -12,6 +12,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.format.TextStyles;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,13 +22,13 @@ public class StartTrivia implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-        if (RunTrivia.isRunnerActive()) {
+        if (Trivia.isRunnerActive()) {
             src.sendMessage(Text.of(Config.getTriviaPrefix(),
                     TextColors.WHITE, "Integrated runner is already active!"));
             return CommandResult.empty();
         } else {
 
-            RunTrivia.startRunner();
+            Trivia.startRunner();
             src.sendMessage(Text.of(Config.getTriviaPrefix(),
                     TextColors.WHITE, "Integrated runner activated! Running every ",
                     TextColors.LIGHT_PURPLE, Config.getTriviaInterval(), TextColors.WHITE, " seconds!"));
@@ -39,7 +40,8 @@ public class StartTrivia implements CommandExecutor {
                                     TextColors.WHITE, "Want more control over TriviaQuest? Download "))
                             .append(Text.builder("CmdCalendar")
                                     .color(TextColors.DARK_AQUA)
-                                    .onClick(TextActions.openUrl(new URL("https://forums.spongepowered.org/t/cmdcalendar-calendar-automatic-command-scheduler-wip-beta/17735")))
+                                    .style(TextStyles.UNDERLINE)
+                                    .onClick(TextActions.openUrl(new URL("https://forums.spongepowered.org/t/cmdcalendar-calendar-automatic-command-scheduler-v1-1-0/18185/8")))
                                     .onHover(TextActions.showText(Text.of(TextColors.YELLOW, "Click to visit the CmdCalendar page!")))
                                     .build())
                             .build());
