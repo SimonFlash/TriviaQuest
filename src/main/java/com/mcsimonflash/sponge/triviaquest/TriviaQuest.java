@@ -49,14 +49,14 @@ public class TriviaQuest {
     public void onInitilization(GameInitializationEvent event) {
         plugin = this;
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
-        getLogger().info("|     TriviaQuest - Version 1.1.1     |");
-        getLogger().info("|      Developed by: Simon_Flash      |");
+        getLogger().info("|     TriviaQuest - Version 1.2.0     |");
+        getLogger().info("|      Developed By: Simon_Flash      |");
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
 
         CommandSpec AnswerTrivia = CommandSpec.builder()
                 .executor(new AnswerTrivia())
                 .description(Text.of("Answer a TriviaQuest trivia"))
-                .permission("triviaquest.answer")
+                .permission("triviaquest.answer.command")
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.remainingJoinedStrings(Text.of("playerAnswer"))))
                 .build();
