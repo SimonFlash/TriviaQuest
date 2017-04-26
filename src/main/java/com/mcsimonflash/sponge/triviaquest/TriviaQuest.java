@@ -22,14 +22,26 @@ import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 
-@Plugin(id = "triviaquest", name = "TriviaQuest", version = "mc1.10.2-v1.2.0", description = "In-Game Trivia Questions - Developed by Simon_Flash")
+@Plugin(id = "triviaquest", name = "TriviaQuest", version = "mc1.10.2-v1.2.1", description = "In-Game Trivia Questions - Developed by Simon_Flash")
 public class TriviaQuest {
 
     private static TriviaQuest plugin;
     public static TriviaQuest getPlugin() {
         return plugin;
+    }
+
+    private static URL wiki;
+    public static URL getWiki() {
+        return wiki;
+    }
+
+    private static URL discord;
+    public static URL getDiscord() {
+        return discord;
     }
 
     @Inject
@@ -49,9 +61,20 @@ public class TriviaQuest {
     public void onInitilization(GameInitializationEvent event) {
         plugin = this;
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
-        getLogger().info("|     TriviaQuest - Version 1.2.0     |");
+        getLogger().info("|     TriviaQuest - Version 1.2.1     |");
         getLogger().info("|      Developed By: Simon_Flash      |");
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
+        Config.readConfig();
+        try {
+            wiki = new URL("https://github.com/SimonFlash/TriviaQuest/wiki");
+        } catch (MalformedURLException ignored) {
+            getLogger().error("Unable to locate CmdCalendar Wiki!");
+        }
+        try {
+            discord = new URL("https://discordapp.com/invite/4wayq37");
+        } catch (MalformedURLException ignored) {
+            getLogger().error("Unable to locate CmdCalendar Discord!");
+        }
 
         CommandSpec AnswerTrivia = CommandSpec.builder()
                 .executor(new AnswerTrivia())
@@ -107,7 +130,6 @@ public class TriviaQuest {
                 .child(StopTrivia, "StopTrivia", "Stop", "off")
                 .build();
         Sponge.getCommandManager().register(this, TriviaQuest, Lists.newArrayList("TriviaQuest", "Trivia", "tq"));
-        Config.readConfig();
     }
 
     @Listener

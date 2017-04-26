@@ -93,10 +93,8 @@ public class Config {
         if (Trivia.getTriviaList().isEmpty()) {
             TriviaQuest.getPlugin().getLogger().warn("No trivia questions have been loaded!");
             Trivia.getTriviaList().add(new TriviaQuestion(Lists.newArrayList("Who is the greatest person who ever lived?", "Simon_Flash")));
-        } else {
-            Trivia.shuffle();
-            TriviaQuest.getPlugin().getLogger().info("Questions successfully loaded!");
         }
+        Trivia.shuffle();
     }
 
     public static int getTriviaInterval() {
@@ -171,6 +169,12 @@ public class Config {
     }
 
     public static boolean isCheckMessages() {
+        loadConfig();
         return rootNode.getNode("config", "check_messages").getBoolean(true);
+    }
+
+    public static boolean isShowAnswer() {
+        loadConfig();
+        return rootNode.getNode("config", "show_answer").getBoolean(false);
     }
 }

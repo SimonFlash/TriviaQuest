@@ -74,16 +74,14 @@ public class Trivia {
             }
         }
         if (correctAnswer) {
+            String rewardCmd = null;
             String sourceName;
             Text rewardMsg;
             if (src instanceof Player) {
                 sourceName = src.getName();
                 rewardMsg = Text.of(Config.getTriviaPrefix(),
                         TextColors.WHITE, "Nice job! Here's your reward!");
-                String rewardCmd = Config.getTriviaReward();
-                if (rewardCmd != null) {
-                    Sponge.getCommandManager().process(Sponge.getServer().getConsole(), rewardCmd.replaceAll("\\{player}", src.getName()));
-                }
+                rewardCmd = Config.getTriviaReward();
             } else if (src instanceof ConsoleSource){
                 sourceName = ("GLaDOS");
                 rewardMsg = Text.of(Config.getTriviaPrefix(),
@@ -92,14 +90,21 @@ public class Trivia {
                 sourceName = ("The Companion Cube");
                 rewardMsg = Text.of(TextColors.DARK_RED, "I will find you, and I will kill you.");
             }
-            if (triviaQuestion.getAnswer().size() < 2) {
-                Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
-                        TextColors.LIGHT_PURPLE, sourceName, TextColors.WHITE, " got it! The answer is ", TextColors.LIGHT_PURPLE, triviaQuestion.getAnswer()));
+            Text broadcast = Text.of(TextColors.LIGHT_PURPLE, sourceName, TextColors.WHITE, " got it! ");
+            if (Config.isShowAnswer()) {
+                if (triviaQuestion.getAnswer().size() == 1) {
+                    broadcast = broadcast.concat(Text.of("The answer was ", TextColors.LIGHT_PURPLE, triviaQuestion.getAnswer(), "!"));
+                } else {
+                    broadcast = broadcast.concat(Text.of("The answers were ", TextColors.LIGHT_PURPLE, String.join(", ", triviaQuestion.getAnswer()), "!"));
+                }
             } else {
-                Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
-                        TextColors.LIGHT_PURPLE, sourceName, TextColors.WHITE, " got it! The answers are ", TextColors.LIGHT_PURPLE, String.join(", ", triviaQuestion.getAnswer()), "!"));
+                broadcast = broadcast.concat(Text.of("Better luck next time!"));
             }
-            src.sendMessage(rewardMsg);
+            Sponge.getServer().getBroadcastChannel().send(broadcast);
+            if (!(src instanceof Player) || rewardCmd == null) {
+                src.sendMessage(rewardMsg);
+                Sponge.getCommandManager().process(Sponge.getServer().getConsole(), rewardCmd.replaceAll("\\{player}", src.getName()));
+            }
             Trivia.endQuestion();
             return true;
         } else {

@@ -18,8 +18,18 @@ public class TriviaTask implements Consumer<Task> {
     public void accept(Task task) {
         seconds--;
         if (seconds < 1) {
-            Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
-                    TextColors.WHITE, "No one answered in time! The answer was ", TextColors.LIGHT_PURPLE, Trivia.getTriviaQuestion().getAnswer(), "!"));
+            Text broadcast = Text.of(Config.getTriviaPrefix(),
+                    TextColors.WHITE, "No one answered fast enough! ");
+            if (Config.isShowAnswer()) {
+                if (Trivia.getTriviaQuestion().getAnswer().size() == 1) {
+                    broadcast = broadcast.concat(Text.of("The answer was ", TextColors.LIGHT_PURPLE, Trivia.getTriviaQuestion().getAnswer(), "!"));
+                } else {
+                    broadcast = broadcast.concat(Text.of("The answers were ", TextColors.LIGHT_PURPLE, String.join(", ", Trivia.getTriviaQuestion().getAnswer()), "!"));
+                }
+            } else {
+                broadcast = broadcast.concat(Text.of("Better luck next time!"));
+            }
+            Sponge.getServer().getBroadcastChannel().send(broadcast);
             task.cancel();
             Trivia.removeTriviaQuestion();
         }
