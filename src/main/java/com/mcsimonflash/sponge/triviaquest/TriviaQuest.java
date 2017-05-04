@@ -26,7 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 
-@Plugin(id = "triviaquest", name = "TriviaQuest", version = "mc1.10.2-v1.2.1", description = "In-Game Trivia Questions - Developed by Simon_Flash")
+@Plugin(id = "triviaquest", name = "TriviaQuest", version = "mc1.10.2-v1.2.2", description = "In-Game Trivia Questions - Developed by Simon_Flash")
 public class TriviaQuest {
 
     private static TriviaQuest plugin;
@@ -61,7 +61,7 @@ public class TriviaQuest {
     public void onInitilization(GameInitializationEvent event) {
         plugin = this;
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
-        getLogger().info("|     TriviaQuest - Version 1.2.1     |");
+        getLogger().info("|     TriviaQuest - Version 1.2.2     |");
         getLogger().info("|      Developed By: Simon_Flash      |");
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
         Config.readConfig();

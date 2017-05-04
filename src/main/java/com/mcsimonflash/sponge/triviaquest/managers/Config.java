@@ -51,7 +51,7 @@ public class Config {
         if (Files.notExists(TriviaQuest.getPlugin().getDefaultConfig())) {
             try {
                 Sponge.getAssetManager().getAsset(TriviaQuest.getPlugin(), "defaultConfig.conf").get().copyToFile(TriviaQuest.getPlugin().getDefaultConfig());
-                TriviaQuest.getPlugin().getLogger().warn("Default Config loaded! Edit triviaquest.conf to change settings and create tasks!");
+                TriviaQuest.getPlugin().getLogger().warn("Default config loaded into triviaquest.conf!");
             } catch (IOException e) {
                 e.printStackTrace();
                 TriviaQuest.getPlugin().getLogger().error("Unable to clone asset! Default config must be copied in manually");

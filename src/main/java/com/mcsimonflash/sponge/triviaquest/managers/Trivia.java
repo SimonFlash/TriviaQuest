@@ -101,8 +101,8 @@ public class Trivia {
                 broadcast = broadcast.concat(Text.of("Better luck next time!"));
             }
             Sponge.getServer().getBroadcastChannel().send(broadcast);
-            if (!(src instanceof Player) || rewardCmd == null) {
-                src.sendMessage(rewardMsg);
+            src.sendMessage(rewardMsg);
+            if ((src instanceof Player) && rewardCmd != null) {
                 Sponge.getCommandManager().process(Sponge.getServer().getConsole(), rewardCmd.replaceAll("\\{player}", src.getName()));
             }
             Trivia.endQuestion();
