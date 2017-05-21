@@ -16,7 +16,7 @@ public class StopTrivia implements CommandExecutor {
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         if (Trivia.isRunnerActive()) {
-            Trivia.stopRunner();
+            Trivia.stopRunner(false);
             src.sendMessage(Text.of(Config.getTriviaPrefix(),
                     TextColors.WHITE, "Integrated runner halted!"));
             return CommandResult.success();

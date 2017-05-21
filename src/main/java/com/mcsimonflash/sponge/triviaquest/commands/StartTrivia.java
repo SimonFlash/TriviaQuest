@@ -27,12 +27,10 @@ public class StartTrivia implements CommandExecutor {
                     TextColors.WHITE, "Integrated runner is already active!"));
             return CommandResult.empty();
         } else {
-
-            Trivia.startRunner();
+            Trivia.startRunner(0);
             src.sendMessage(Text.of(Config.getTriviaPrefix(),
                     TextColors.WHITE, "Integrated runner activated! Running every ",
                     TextColors.LIGHT_PURPLE, Config.getTriviaInterval(), TextColors.WHITE, " seconds!"));
-
             if (!Sponge.getPluginManager().isLoaded("cmdcalendar")) {
                 try {
                     src.sendMessage(Text.builder()

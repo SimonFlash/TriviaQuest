@@ -13,9 +13,22 @@ import java.util.function.Consumer;
 public class TriviaTask implements Consumer<Task> {
 
     private int seconds = Config.getTriviaLength();
+    private String name;
+
+    public TriviaTask(String name) {
+        this.name = name;
+    }
 
     @Override
     public void accept(Task task) {
+        if (seconds == Config.getTriviaLength()) {
+            if (name != null) {
+                Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
+                        TextColors.LIGHT_PURPLE, name, TextColors.WHITE, " is asking a question!"));
+            }
+            Sponge.getServer().getBroadcastChannel().send(Text.of(Config.getTriviaPrefix(),
+                    TextColors.WHITE, Trivia.getTriviaQuestion().getQuestion()));
+        }
         seconds--;
         if (seconds < 1) {
             Text broadcast = Text.of(Config.getTriviaPrefix(),

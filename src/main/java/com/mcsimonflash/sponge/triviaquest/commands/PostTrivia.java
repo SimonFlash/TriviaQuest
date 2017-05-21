@@ -15,6 +15,7 @@ public class PostTrivia implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+
         if (Trivia.isTriviaActive()) {
             src.sendMessage(Text.of(Config.getTriviaPrefix(),
                     TextColors.WHITE, "There's already a trivia running!"));

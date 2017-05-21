@@ -26,7 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 
-@Plugin(id = "triviaquest", name = "TriviaQuest", version = "mc1.10.2-v1.2.2", description = "In-Game Trivia Questions - Developed by Simon_Flash")
+@Plugin(id = "triviaquest", name = "TriviaQuest", version = "mc1.10.2-v1.3.0", description = "In-Game Trivia Questions - Developed by Simon_Flash")
 public class TriviaQuest {
 
     private static TriviaQuest plugin;
@@ -61,7 +61,7 @@ public class TriviaQuest {
     public void onInitilization(GameInitializationEvent event) {
         plugin = this;
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
-        getLogger().info("|     TriviaQuest - Version 1.2.2     |");
+        getLogger().info("|     TriviaQuest - Version 1.3.0     |");
         getLogger().info("|      Developed By: Simon_Flash      |");
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
         Config.readConfig();
@@ -82,6 +82,20 @@ public class TriviaQuest {
                 .permission("triviaquest.answer.command")
                 .arguments(
                         GenericArguments.onlyOne(GenericArguments.remainingJoinedStrings(Text.of("playerAnswer"))))
+                .build();
+        CommandSpec AskTrivia = CommandSpec.builder()
+                .executor(new AskTrivia())
+                .description(Text.of("Asks a TriviaQuest question"))
+                .permission("triviaquest.ask")
+                .arguments(
+                        GenericArguments.onlyOne(GenericArguments.remainingJoinedStrings(Text.of("quesAnsStr"))))
+                .build();
+        CommandSpec CancelTrivia = CommandSpec.builder()
+                .executor(new AskTrivia())
+                .description(Text.of("Asks a TriviaQuest question"))
+                .permission("triviaquest.cancel")
+                .arguments(
+                        GenericArguments.optional(GenericArguments.player(Text.of("opt-player"))))
                 .build();
         CommandSpec DisablePack = CommandSpec.builder()
                 .executor(new DisablePack())
@@ -122,6 +136,8 @@ public class TriviaQuest {
                 .description(Text.of("Opens in-game documentation"))
                 .permission("triviaquest.base")
                 .child(AnswerTrivia, "AnswerTrivia", "Answer", "ans")
+                .child(AskTrivia, "AskTrivia", "ask")
+                .child(CancelTrivia, "CancelTrivia", "cancel", "can")
                 .child(EnablePack, "EnablePack", "Enable", "ep")
                 .child(DisablePack, "DisablePack", "Disable", "dp")
                 .child(PostTrivia, "PostTrivia", "Post", "pt")

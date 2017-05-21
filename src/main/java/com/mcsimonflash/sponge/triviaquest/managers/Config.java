@@ -82,7 +82,7 @@ public class Config {
                         List<String> quesAnsList = Lists.newArrayList();
                         Collections.addAll(quesAnsList, quesAnsStr.substring(1, quesAnsStr.length() - 1).split("\\),\\("));
                         if (quesAnsList.size() > 1) {
-                            Trivia.getTriviaList().add(new TriviaQuestion(quesAnsList));
+                            Trivia.getTriviaList().add(new TriviaQuestion(quesAnsList.remove(0), quesAnsList, true));
                             continue;
                         }
                     }
@@ -92,7 +92,7 @@ public class Config {
         }
         if (Trivia.getTriviaList().isEmpty()) {
             TriviaQuest.getPlugin().getLogger().warn("No trivia questions have been loaded!");
-            Trivia.getTriviaList().add(new TriviaQuestion(Lists.newArrayList("Who is the greatest person who ever lived?", "Simon_Flash")));
+            Trivia.getTriviaList().add(new TriviaQuestion("Who is the greatest person who ever lived?", Lists.newArrayList("Simon_Flash"), false));
         }
         Trivia.shuffle();
     }
@@ -103,6 +103,10 @@ public class Config {
 
     public static int getTriviaLength() {
         return triviaLength;
+    }
+
+    public static int getPlayerDelay() {
+        return rootNode.getNode("config", "player_delay").getInt();
     }
 
     public static Text getTriviaPrefix() {
@@ -171,6 +175,11 @@ public class Config {
     public static boolean isCheckMessages() {
         loadConfig();
         return rootNode.getNode("config", "check_messages").getBoolean(true);
+    }
+
+    public static boolean isPlayerQuestions() {
+        loadConfig();
+        return rootNode.getNode("config", "player_questions").getBoolean(false);
     }
 
     public static boolean isShowAnswer() {

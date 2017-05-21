@@ -6,14 +6,18 @@ import java.util.List;
 
 public class TriviaQuestion {
 
+    private boolean giveReward;
     private String question;
     private List<String> answer = Lists.newArrayList();
 
-    public TriviaQuestion(List<String> quesAnsList) {
-        this.question = quesAnsList.get(0);
-        for (int i = 1; i < quesAnsList.size(); i++) {
-            answer.add(quesAnsList.get(i));
-        }
+    public TriviaQuestion(String question, List<String> ansList, boolean giveReward) {
+        this.question = question;
+        answer.addAll(ansList);
+        this.giveReward = giveReward;
+    }
+
+    public boolean isGiveReward() {
+        return giveReward;
     }
 
     public String getQuestion() {
