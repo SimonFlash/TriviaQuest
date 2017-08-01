@@ -9,20 +9,21 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 
-public class PostTrivia implements CommandExecutor {
+public class ToggleRunner implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-        if (Trivia.trivia != null) {
-            src.sendMessage(Trivia.prefix.concat(Util.toText("A trivia question is currently active!")));
-            return CommandResult.empty();
-        } else {
-            if (Trivia.runnerEnabled) {
-                Trivia.runnerTask.cancel();
+        if (Trivia.runnerEnabled) {
+            if (Trivia.trivia != null) {
+                Trivia.runnerTask.getConsumer().accept(Trivia.runnerTask);
             }
-            Trivia.askQuestion(true);
-            return CommandResult.success();
+            Trivia.runnerTask.cancel();
+        } else {
+            Trivia.startRunner();
         }
+        Trivia.runnerEnabled = !Trivia.runnerEnabled;
+        src.sendMessage(Trivia.prefix.concat(Util.toText("The trivia runner has been &d" + (Trivia.runnerEnabled ? "enabled" : "disabled") + "&f!")));
+        return CommandResult.success();
     }
 }

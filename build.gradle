@@ -1,5 +1,5 @@
 group 'triviaquest'
-version 'mc1.10.2-v1.3.0'
+version 'mc1.11.2-v2.0.0-legacy'
 
 apply plugin: 'java'
 
@@ -12,5 +12,5 @@ repositories {
 }
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:5.0.0'
+    compile 'org.spongepowered:spongeapi:6.0.0'
 }

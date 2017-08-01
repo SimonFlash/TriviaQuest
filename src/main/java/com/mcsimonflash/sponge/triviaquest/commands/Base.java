@@ -28,18 +28,18 @@ public class Base implements CommandExecutor {
                 .append(Text.builder("<Subcommand>")
                         .color(TextColors.LIGHT_PURPLE)
                         .onHover(TextActions.showText(Text.of(
-                                TextColors.DARK_PURPLE, "Subcommands: ", TextColors.LIGHT_PURPLE, "AnswerTrivia, AskTrivia, CancelTrivia, DisablePack, EnablePack, PostTrivia, ReloadTrivia, StartTrivia, StopTrivia")))
+                                TextColors.DARK_PURPLE, "Subcommands: ", TextColors.LIGHT_PURPLE, "AnswerTrivia, AskTrivia, CancelTrivia, DisablePack, EnablePack, PostTrivia, ReloadTrivia, ToggleRunner, StopTrivia")))
                         .build())
                 .build());
-        if (src.hasPermission("triviaquest.answer.command")) {
+        if (src.hasPermission("triviaquest.answertrivia.base")) {
             src.sendMessage(Text.builder("/TriviaQuest AnswerTrivia ")
                     .color(TextColors.DARK_PURPLE)
                     .onClick(TextActions.suggestCommand("/TriviaQuest AnswerTrivia "))
                     .onHover(TextActions.showText(Text.of(
                             TextColors.DARK_PURPLE, "AnswerTrivia: ", TextColors.LIGHT_PURPLE, "Answers a trivia question\n",
                             TextColors.DARK_PURPLE, "Aliases: ", TextColors.LIGHT_PURPLE, "AnswerTrivia, Answer, ans\n",
-                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.answer.command\n",
-                            TextColors.DARK_PURPLE, "Note: ", TextColors.LIGHT_PURPLE, "Players must have triviaquest.answer.chat to use chat parsing")))
+                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.answertrivia.base\n",
+                            TextColors.DARK_PURPLE, "Note: ", TextColors.LIGHT_PURPLE, "Players must have triviaquest.answertrivia.chat to use chat parsing")))
                     .append(Text.builder("<Answer>")
                             .color(TextColors.LIGHT_PURPLE)
                             .onHover(TextActions.showText(Text.of(
@@ -47,117 +47,24 @@ public class Base implements CommandExecutor {
                             .build())
                     .build());
         }
-        if (src.hasPermission("triviaquest.ask")) {
-            src.sendMessage(Text.builder("/TriviaQuest AskTrivia ")
+        if (src.hasPermission("triviaquest.posttrivia.base")) {
+            src.sendMessage(Text.builder("/TriviaQuest PostTrivia")
                     .color(TextColors.DARK_PURPLE)
-                    .onClick(TextActions.suggestCommand("/TriviaQuest AskTrivia "))
-                    .onHover(TextActions.showText(Text.of(
-                            TextColors.DARK_PURPLE, "AskTrivia: ", TextColors.LIGHT_PURPLE, "Asks a trivia question\n",
-                            TextColors.DARK_PURPLE, "Aliases: ", TextColors.LIGHT_PURPLE, "AskTrivia, ask\n",
-                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.ask\n")))
-                    .append(Text.builder("<Trivia>")
-                            .color(TextColors.LIGHT_PURPLE)
-                            .onHover(TextActions.showText(Text.of(
-                                    TextColors.DARK_PURPLE, "Trivia<String>: ", TextColors.LIGHT_PURPLE, "New trivia question. Uses the format [<Question> ans:<Answer>")))
-                            .build())
-                    .build());
-        }
-        if (src.hasPermission("triviaquest.cancel.base")) {
-            if (src.hasPermission("triviaquest.cancel.other")) {
-                src.sendMessage(Text.builder("/TriviaQuest CancelTrivia ")
-                        .color(TextColors.DARK_PURPLE)
-                        .onClick(TextActions.suggestCommand("/TriviaQuest CancelTrivia "))
-                        .onHover(TextActions.showText(Text.of(
-                                TextColors.DARK_PURPLE, "AskTrivia: ", TextColors.LIGHT_PURPLE, "Cancels a player's queued question\n",
-                                TextColors.DARK_PURPLE, "Aliases: ", TextColors.LIGHT_PURPLE, "CancelTrivia, Cancel, can\n",
-                                TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.cancel.base\n")))
-                        .append(Text.builder("<Opt-Player>")
-                                .color(TextColors.LIGHT_PURPLE)
-                                .onHover(TextActions.showText(Text.of(
-                                        TextColors.DARK_PURPLE, "Player<Player>: ", TextColors.LIGHT_PURPLE, "Player to cancel question, else yourself")))
-                                .build())
-                        .build());
-            } else {
-                src.sendMessage(Text.builder("/TriviaQuest CancelTrivia ")
-                        .color(TextColors.DARK_PURPLE)
-                        .onClick(TextActions.suggestCommand("/TriviaQuest CancelTrivia "))
-                        .onHover(TextActions.showText(Text.of(
-                                TextColors.DARK_PURPLE, "AskTrivia: ", TextColors.LIGHT_PURPLE, "Cancels your queued question\n",
-                                TextColors.DARK_PURPLE, "Aliases: ", TextColors.LIGHT_PURPLE, "CancelTrivia, Cancel, can\n",
-                                TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.cancel.base\n")))
-                        .build());
-            }
-        }
-        if (src.hasPermission("triviaquest.packs.disable")) {
-            src.sendMessage(Text.builder("/Trivia DisablePack ")
-                    .color(TextColors.DARK_PURPLE)
-                    .onClick(TextActions.suggestCommand("/Trivia DisablePack "))
-                    .onHover(TextActions.showText(Text.of(
-                            TextColors.DARK_PURPLE, "DisablePack: ", TextColors.LIGHT_PURPLE, "Disables a trivia pack\n",
-                            TextColors.DARK_PURPLE, "Aliases: ", TextColors.LIGHT_PURPLE, "DisablePack, Disable, dp\n",
-                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.packs.disable\n",
-                            TextColors.DARK_PURPLE, "Note: ", TextColors.LIGHT_PURPLE, "Trivia pool must be reloaded to see changes")))
-                    .append(Text.builder("<Pack>")
-                            .color(TextColors.LIGHT_PURPLE)
-                            .onHover(TextActions.showText(Text.of(
-                                    TextColors.DARK_PURPLE, "Pack<String>: ", TextColors.LIGHT_PURPLE, "Name of the trivia pack")))
-                            .build())
-                    .build());
-        }
-        if (src.hasPermission("triviaquest.packs.enable")) {
-            src.sendMessage(Text.builder("/Trivia EnablePack ")
-                    .color(TextColors.DARK_PURPLE)
-                    .onClick(TextActions.suggestCommand("/Trivia EnablePack "))
-                    .onHover(TextActions.showText(Text.of(
-                            TextColors.DARK_PURPLE, "EnablePack: ", TextColors.LIGHT_PURPLE, "Enables a trivia pack\n",
-                            TextColors.DARK_PURPLE, "Aliases: ", TextColors.LIGHT_PURPLE, "EnablePack, Enable, ep\n",
-                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.packs.enable\n",
-                            TextColors.DARK_PURPLE, "Note: ", TextColors.LIGHT_PURPLE, "Trivia pool must be reloaded to see changes")))
-                    .append(Text.builder("<Pack>")
-                            .color(TextColors.LIGHT_PURPLE)
-                            .onHover(TextActions.showText(Text.of(
-                                    TextColors.DARK_PURPLE, "Pack<String>: ", TextColors.LIGHT_PURPLE, "Name of the trivia pack")))
-                            .build())
-                    .build());
-        }
-        if (src.hasPermission("triviaquest.trivia.post")) {
-            src.sendMessage(Text.builder("/Trivia PostTrivia")
-                    .color(TextColors.DARK_PURPLE)
-                    .onClick(TextActions.suggestCommand("/Trivia PostTrivia"))
+                    .onClick(TextActions.suggestCommand("/TriviaQuest PostTrivia"))
                     .onHover(TextActions.showText(Text.of(
                             TextColors.DARK_PURPLE, "PostTrivia: ", TextColors.LIGHT_PURPLE, "Posts a trivia question from the pool\n",
                             TextColors.DARK_PURPLE, "Aliases: ", TextColors.LIGHT_PURPLE, "PostTrivia, Post, pt\n",
-                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.trivia.post")))
+                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.posttrivia.base")))
                     .build());
         }
-        if (src.hasPermission("triviaquest.trivia.reload")) {
-            src.sendMessage(Text.builder("/Trivia ReloadTrivia")
+        if (src.hasPermission("triviaquest.togglerunner.base")) {
+            src.sendMessage(Text.builder("/TriviaQuest ToggleRunner")
                     .color(TextColors.DARK_PURPLE)
-                    .onClick(TextActions.suggestCommand("/Trivia ReloadTrivia"))
+                    .onClick(TextActions.suggestCommand("/TriviaQuest ToggleRunner"))
                     .onHover(TextActions.showText(Text.of(
-                            TextColors.DARK_PURPLE, "ReloadTrivia: ", TextColors.LIGHT_PURPLE, "Reloads the trivia pool from the config\n",
-                            TextColors.DARK_PURPLE, "Aliases: ", TextColors.LIGHT_PURPLE, "ReloadTrivia, Reload, rt\n",
-                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.trivia.reload")))
-                    .build());
-        }
-        if (src.hasPermission("triviaquest.run.start")) {
-            src.sendMessage(Text.builder("/Trivia StartTrivia")
-                    .color(TextColors.DARK_PURPLE)
-                    .onClick(TextActions.suggestCommand("/Trivia StartTrivia"))
-                    .onHover(TextActions.showText(Text.of(
-                            TextColors.DARK_PURPLE, "StartTrivia: ", TextColors.LIGHT_PURPLE, "Starts automatic trivia posting\n",
-                            TextColors.DARK_PURPLE, "Aliases: ", TextColors.LIGHT_PURPLE, "StartTrivia, Start, on\n",
-                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.run.start")))
-                    .build());
-        }
-        if (src.hasPermission("triviaquest.run.stop")) {
-            src.sendMessage(Text.builder("/Trivia StopTrivia")
-                    .color(TextColors.DARK_PURPLE)
-                    .onClick(TextActions.suggestCommand("/Trivia StopTrivia"))
-                    .onHover(TextActions.showText(Text.of(
-                            TextColors.DARK_PURPLE, "StopTrivia: ", TextColors.LIGHT_PURPLE, "Stops automatic trivia posting\n",
+                            TextColors.DARK_PURPLE, "ToggleRunner: ", TextColors.LIGHT_PURPLE, "Enables/Disables the integrated trivia runner\n",
                             TextColors.DARK_PURPLE, "Aliases: ", TextColors.LIGHT_PURPLE, "StopTrivia, Stop, off\n",
-                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.run.stop")))
+                            TextColors.DARK_PURPLE, "Permission: ", TextColors.LIGHT_PURPLE, "triviaquest.togglerunner.base")))
                     .build());
         }
         if (TriviaQuest.getWiki() != null && TriviaQuest.getDiscord() != null) {
