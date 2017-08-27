@@ -19,6 +19,11 @@ public class Scramble implements ITrivia {
     }
 
     @Override
+    public String getAnswer() {
+        return "The word was " + Word + "!";
+    }
+
+    @Override
     public boolean checkAnswer(String str) {
         return str.equalsIgnoreCase(Word);
     }

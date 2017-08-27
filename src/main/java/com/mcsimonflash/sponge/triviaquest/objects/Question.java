@@ -18,6 +18,11 @@ public class Question implements ITrivia {
     }
 
     @Override
+    public String getAnswer() {
+        return "The answer" + (Answers.size() > 1 ? "s were " : " was ") + String.join(", " + Answers) + "!";
+    }
+
+    @Override
     public boolean checkAnswer(String str) {
         return Answers.stream().anyMatch(a -> a.equalsIgnoreCase(str));
     }

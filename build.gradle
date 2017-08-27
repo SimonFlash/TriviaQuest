@@ -1,5 +1,5 @@
 group 'triviaquest'
-version 'mc1.11.2-v2.0.0-legacy'
+version 's6.0-v2.0.1'
 
 apply plugin: 'java'
 

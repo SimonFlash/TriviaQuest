@@ -23,6 +23,7 @@ public class Config {
     private static Path packDir = coreDir.resolve("packs");
     private static CommentedConfigurationNode coreNode;
 
+    public static boolean showAnswers;
     public static int chanceSum;
     public static int enableRewardsCount;
     public static int enableTriviaCount;
@@ -55,7 +56,6 @@ public class Config {
 
     public static boolean readConfig() {
         if (initializeConfig()) {
-            testLegacy();
             try {
                 enabledPacks = coreNode.getNode("enabled-packs").getList(TypeToken.of(String.class));
             } catch (ObjectMappingException ignored) {
@@ -66,6 +66,7 @@ public class Config {
             enabledPacks.forEach(p -> loadPack(packDir.resolve(p + ".pack")));
             coreNode.getNode("rewards").getChildrenMap().values().forEach(r -> rewardCommands.put(r.getNode("command").getString(""), r.getNode("chance").getInt(0)));
             chanceSum = rewardCommands.values().stream().mapToInt(Integer::intValue).sum();
+            showAnswers = coreNode.getNode("config", "show-answers").getBoolean(false);
             enableRewardsCount = coreNode.getNode("config", "enable-rewards-count").getInt(0);
             enableTriviaCount = coreNode.getNode("config", "enable-trivia-count").getInt(0);
             triviaInterval = coreNode.getNode("config", "trivia-interval").getInt(300);
@@ -113,49 +114,6 @@ public class Config {
             }
         } else {
             TriviaQuest.getPlugin().getLogger().error("Attempted to load non-existent pack " + path.getFileName() + "!");
-        }
-    }
-
-    public static void testLegacy() {
-        if (coreNode.getNode("-legacy").getBoolean(false)) {
-            TriviaQuest.getPlugin().getLogger().warn("Attempting to update Legacy config");
-            try {
-                CommentedConfigurationNode oldNode = HoconConfigurationLoader.builder().setPath(TriviaQuest.getPlugin().getDirectory().resolve("triviaquest.conf")).build().load();
-                for (CommentedConfigurationNode pack : oldNode.getNode("trivia").getChildrenMap().values()) {
-                    TriviaQuest.getPlugin().getLogger().warn("Converting pack " + pack.getKey());
-                    Path newPack = packDir.resolve(pack.getKey() + ".pack");
-                    if (Files.notExists(newPack)) {
-                        Map<String, Question> questions = Maps.newHashMap();
-                        for (CommentedConfigurationNode question : pack.getChildrenMap().values()) {
-                            String quesAnsStr = question.getString("");
-                            quesAnsStr = quesAnsStr.startsWith("(") ? quesAnsStr.substring(1) : quesAnsStr;
-                            quesAnsStr = quesAnsStr.endsWith(")") ? quesAnsStr.substring(0, quesAnsStr.length() - 1) : quesAnsStr;
-                            String[] split = quesAnsStr.split("\\),\\(");
-                            questions.put((String) question.getKey(), new Question(split[0], Arrays.asList(Arrays.copyOfRange(split, 1, split.length))));
-                        }
-                        HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setPath(packDir.resolve(pack.getKey() + ".pack")).build();
-                        CommentedConfigurationNode packNode = loader.load();
-                        questions.forEach((k, q) -> {
-                            packNode.getNode("trivia", "questions", k, "question").setValue(q.Question);
-                            packNode.getNode("trivia", "questions", k, "answers").setValue(q.Answers);
-                        });
-                        loader.save(packNode);
-                    } else {
-                        TriviaQuest.getPlugin().getLogger().error("A pack file exists for " + pack.getKey() + "! Conversion of this pack has been stopped.");
-                    }
-                }
-                try {
-                    coreNode.getNode("enabled-packs").setValue(oldNode.getNode("config", "enabled_packs").getList(TypeToken.of(String.class)));
-                } catch (ObjectMappingException ex) {
-                    TriviaQuest.getPlugin().getLogger().error("Could not retrieve enabled-packs list.");
-                }
-                coreNode.getNode("-legacy").setValue(false);
-                HoconConfigurationLoader.builder().setPath(coreDir.resolve("triviaquest.core")).build().save(coreNode);
-            } catch (IOException e) {
-                TriviaQuest.getPlugin().getLogger().error("Unable to load/save new pack file!");
-                e.printStackTrace();
-            }
-            TriviaQuest.getPlugin().getLogger().warn("Config conversion has concluded.");
         }
     }
 }

@@ -4,5 +4,7 @@ public interface ITrivia {
 
     String getQuestion();
 
+    String getAnswer();
+
     boolean checkAnswer(String str);
 }

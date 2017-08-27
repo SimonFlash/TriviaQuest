@@ -16,6 +16,8 @@ config {
     enable-rewards-count=4
     # Number of players online for trivia to run automatically.
     enable-trivia-count=2
+    # Show answers to to the question after trivia ends.
+    show-answers=false
     # Interval between trivia questions by the runner, in seconds.
     trivia-interval=300
     # Length of each trivia question, in seconds.

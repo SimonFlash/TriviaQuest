@@ -24,7 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 
-@Plugin(id = "triviaquest", name = "TriviaQuest", version = "mc1.11.2-v2.0.0-legacy", description = "In-Game Trivia Questions", authors = "Simon_Flash")
+@Plugin(id = "triviaquest", name = "TriviaQuest", version = "s6.0-v2.0.1", description = "In-Game Trivia Questions", authors = "Simon_Flash")
 public class TriviaQuest {
 
     private static TriviaQuest plugin;
@@ -59,21 +59,16 @@ public class TriviaQuest {
     public void onInitilization(GameInitializationEvent event) {
         plugin = this;
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
-        getLogger().info("| TriviaQuest -- Version 2.0.0-legacy |");
+        getLogger().info("|     TriviaQuest - Version 2.0.1     |");
         getLogger().info("|      Developed By: Simon_Flash      |");
         getLogger().info("+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=+");
         Config.readConfig();
         try {
             wiki = new URL("https://github.com/SimonFlash/TriviaQuest/wiki");
-        } catch (MalformedURLException ignored) {
-            getLogger().error("Unable to locate TriviaQuest Wiki!");
-        }
-        try {
             discord = new URL("https://discordapp.com/invite/4wayq37");
         } catch (MalformedURLException ignored) {
-            getLogger().error("Unable to locate Support Discord!");
+            getLogger().error("Unable to locate TriviaQuest Wiki / Support Discord!");
         }
-
         CommandSpec AnswerTrivia = CommandSpec.builder()
                 .executor(new AnswerTrivia())
                 .description(Text.of("Answer a TriviaQuest trivia"))
@@ -99,7 +94,7 @@ public class TriviaQuest {
                 .child(PostTrivia, "PostTrivia", "Post", "pt")
                 .child(ToggleRunner, "ToggleRunner", "Toggle", "tr")
                 .build();
-        Sponge.getCommandManager().register(this, TriviaQuest, Lists.newArrayList("TriviaQuest", "Trivia", "tq"));
+        Sponge.getCommandManager().register(plugin, TriviaQuest, Lists.newArrayList("TriviaQuest", "Trivia", "tq"));
     }
 
     @Listener

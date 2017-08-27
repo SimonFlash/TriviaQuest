@@ -50,7 +50,7 @@ public class Trivia {
         if (answered) {
             runnerTask.cancel();
         } else {
-            Sponge.getServer().getBroadcastChannel().send(Trivia.prefix.concat(Util.toText("Times up! Better luck next time!")));
+            Sponge.getServer().getBroadcastChannel().send(Trivia.prefix.concat(Util.toText("Times up! " + (Config.showAnswers ? trivia.getAnswer() : "Better luck next time!"))));
         }
         trivia = null;
         if (runnerEnabled) {
@@ -69,7 +69,7 @@ public class Trivia {
 
     public static boolean processAnswer(CommandSource src, String answer) {
         if (trivia.checkAnswer(answer)) {
-            Sponge.getServer().getBroadcastChannel().send(Trivia.prefix.concat(Util.toText("&d" + src.getName() + "&f got it! Better luck next time! ^^")));
+            Sponge.getServer().getBroadcastChannel().send(Trivia.prefix.concat(Util.toText("&d" + src.getName() + "&f got it! " + (Config.showAnswers ? trivia.getAnswer() : "Better luck next time!"))));
             if (Sponge.getServer().getOnlinePlayers().size() >= Config.enableRewardsCount) {
                 String rewardCmd = Util.getReward();
                 if (!rewardCmd.isEmpty()) {
