@@ -1,5 +1,5 @@
 # TriviaQuest - Developed by Simon_Flash
-# Config Version - 2.0.0
+# Config Version - 2.1.0
 #
 # For reference, check out the TriviaQuest Wiki
 # https://github.com/SimonFlash/TriviaQuest/wiki
@@ -10,6 +10,7 @@
 trivia {
     completions {
         GoodLuck {
+            # Choices for completion forms
             choices=["_nt_d__es_abl_s___nt_ria_i_m"]
             word="Antidisestablishmentarianism"
         }
@@ -19,15 +20,11 @@ trivia {
             answers=["Simon_Flash", "Simon"]
             question="Who is the developer of TriviaQuest?"
         }
-        Psyduck {
-            answers=["AnDwHaT5", "Avery"]
-            question="Who is the greatest Psyduck in the world?"
-        }
     }
     scrambles {
-        Sponge {
-            choices=["neoSgp erwePdo"]
-            word="Sponge Powered"
+        Spongie {
+            # No choices are give, so scrambles will be generated.
+            word="Spongie"
         }
     }
 }

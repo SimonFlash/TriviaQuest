@@ -1,9 +1,11 @@
 package com.mcsimonflash.sponge.triviaquest.objects;
 
-import java.util.List;
-import java.util.Random;
+import com.mcsimonflash.sponge.triviaquest.managers.Config;
+import com.mcsimonflash.sponge.triviaquest.managers.Util;
 
-public class Scramble implements ITrivia {
+import java.util.List;
+
+public class Scramble implements Trivia {
 
     public String Word;
     public List<String> Choices;
@@ -15,12 +17,12 @@ public class Scramble implements ITrivia {
 
     @Override
     public String getQuestion() {
-        return "Unscramble the letters! " + Choices.get(new Random().nextInt(Choices.size()));
+        return Config.scrambleQuestion.replace("<word>", Choices.isEmpty() ? Util.getScramble(Word) : Choices.get(Util.random.nextInt(Choices.size())));
     }
 
     @Override
     public String getAnswer() {
-        return "The word was " + Word + "!";
+        return Config.scrambleAnswer.replace("<word>", Word);
     }
 
     @Override

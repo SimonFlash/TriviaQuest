@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IdeaProjects-TriviaQuest.iml" filepath="$PROJECT_DIR$/.idea/modules/IdeaProjects-TriviaQuest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IdeaProjects-TriviaQuest_main.iml" filepath="$PROJECT_DIR$/.idea/modules/IdeaProjects-TriviaQuest_main.iml" group="TriviaQuest" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/IdeaProjects-TriviaQuest_test.iml" filepath="$PROJECT_DIR$/.idea/modules/IdeaProjects-TriviaQuest_test.iml" group="TriviaQuest" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/TriviaQuest.iml" filepath="$PROJECT_DIR$/.idea/modules/TriviaQuest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/TriviaQuest_main.iml" filepath="$PROJECT_DIR$/.idea/modules/TriviaQuest_main.iml" group="TriviaQuest" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/TriviaQuest_test.iml" filepath="$PROJECT_DIR$/.idea/modules/TriviaQuest_test.iml" group="TriviaQuest" />

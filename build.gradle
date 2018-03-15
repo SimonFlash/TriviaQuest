@@ -1,16 +1,22 @@
-group 'triviaquest'
-version 's6.0-v2.0.1'
-
-apply plugin: 'java'
-
-repositories {
-    mavenCentral()
-    maven {
-        name = 'sponge'
-        url = 'https://repo.spongepowered.org/maven'
-    }
+plugins {
+    id 'java'
+    id 'org.spongepowered.plugin' version '0.8.1'
 }
+
+group 'com.mcsimonflash.sponge.triviaquest'
+version '2.1.0'
+ext.spongeversion = '7.1.0-SNAPSHOT'
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:6.0.0'
+    compile "org.spongepowered:spongeapi:${spongeversion}"
 }
+
+jar {
+    archiveName = "${project.name}-s${spongeversion.substring(0, 3)}-v${version}.jar"
+}
+
+task copyJars(type: Copy) {
+    from jar into project.file("#releases/${version}")
+}
+
+build.dependsOn(copyJars)

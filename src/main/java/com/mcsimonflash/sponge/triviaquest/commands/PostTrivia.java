@@ -13,16 +13,12 @@ public class PostTrivia implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-
         if (Trivia.trivia != null) {
-            src.sendMessage(Trivia.prefix.concat(Util.toText("A trivia question is currently active!")));
-            return CommandResult.empty();
-        } else {
-            if (Trivia.runnerEnabled) {
-                Trivia.runnerTask.cancel();
-            }
-            Trivia.askQuestion(true);
-            return CommandResult.success();
+            throw new CommandException(Util.toText("A trivia question is currently active!"));
+        } else if (Trivia.runnerEnabled) {
+            Trivia.runnerTask.cancel();
         }
+        Trivia.askQuestion(true);
+        return CommandResult.success();
     }
 }

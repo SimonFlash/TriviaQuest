@@ -12,8 +12,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 public class ToggleRunner implements CommandExecutor {
 
     @Override
-    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-
+    public CommandResult execute(CommandSource src, CommandContext args) {
         if (Trivia.runnerEnabled) {
             if (Trivia.trivia != null) {
                 Trivia.runnerTask.getConsumer().accept(Trivia.runnerTask);
@@ -26,4 +25,5 @@ public class ToggleRunner implements CommandExecutor {
         src.sendMessage(Trivia.prefix.concat(Util.toText("The trivia runner has been &d" + (Trivia.runnerEnabled ? "enabled" : "disabled") + "&f!")));
         return CommandResult.success();
     }
+
 }

@@ -2,7 +2,7 @@ package com.mcsimonflash.sponge.triviaquest.objects;
 
 import java.util.List;
 
-public class Question implements ITrivia {
+public class Question implements Trivia {
 
     public String Question;
     public List<String> Answers;
@@ -19,7 +19,7 @@ public class Question implements ITrivia {
 
     @Override
     public String getAnswer() {
-        return "The answer" + (Answers.size() > 1 ? "s were " : " was ") + String.join(", " + Answers) + "!";
+        return "The answer" + (Answers.size() > 1 ? "s were " : " was ") + String.join(", ", Answers);
     }
 
     @Override

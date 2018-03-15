@@ -1,7 +1,6 @@
 package com.mcsimonflash.sponge.triviaquest.commands;
 
 import com.mcsimonflash.sponge.triviaquest.TriviaQuest;
-import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -14,8 +13,7 @@ import org.spongepowered.api.text.format.TextStyles;
 public class Base implements CommandExecutor {
 
     @Override
-    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-
+    public CommandResult execute(CommandSource src, CommandContext args) {
         src.sendMessage(Text.of(TextColors.DARK_PURPLE, "+=-=-=-=-=[", TextColors.LIGHT_PURPLE, "TriviaQuest", TextColors.DARK_PURPLE, "]=-=-=-=-=+"));
         src.sendMessage(Text.builder("/TriviaQuest ")
                 .color(TextColors.DARK_PURPLE)

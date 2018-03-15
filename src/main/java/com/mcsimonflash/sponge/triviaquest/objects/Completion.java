@@ -1,9 +1,11 @@
 package com.mcsimonflash.sponge.triviaquest.objects;
 
-import java.util.List;
-import java.util.Random;
+import com.mcsimonflash.sponge.triviaquest.managers.Config;
+import com.mcsimonflash.sponge.triviaquest.managers.Util;
 
-public class Completion implements ITrivia {
+import java.util.List;
+
+public class Completion implements Trivia {
 
     public String Word;
     public List<String> Choices;
@@ -15,12 +17,12 @@ public class Completion implements ITrivia {
 
     @Override
     public String getQuestion() {
-        return "Fill in the blanks! " + Choices.get(new Random().nextInt(Choices.size()));
+        return Config.completionQuestion.replace("<word>", Choices.isEmpty() ? Util.getCompletion(Word) : Choices.get(Util.random.nextInt(Choices.size())));
     }
 
     @Override
     public String getAnswer() {
-        return "The word was " + Word + "!";
+        return Config.completionAnswer.replace("<word>", Word);
     }
 
     @Override

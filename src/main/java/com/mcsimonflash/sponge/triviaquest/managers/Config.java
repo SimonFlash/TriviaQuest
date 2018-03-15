@@ -7,6 +7,7 @@ import com.mcsimonflash.sponge.triviaquest.TriviaQuest;
 import com.mcsimonflash.sponge.triviaquest.objects.Completion;
 import com.mcsimonflash.sponge.triviaquest.objects.Question;
 import com.mcsimonflash.sponge.triviaquest.objects.Scramble;
+import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
@@ -15,13 +16,14 @@ import org.spongepowered.api.Sponge;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Config {
 
-    private static Path coreDir = TriviaQuest.getPlugin().getDirectory().resolve("triviaquest");
-    private static Path packDir = coreDir.resolve("packs");
-    private static CommentedConfigurationNode coreNode;
+    private static Path dir = Sponge.getConfigManager().getPluginConfig(TriviaQuest.getContainer()).getDirectory(), packs = dir.resolve("packs");
 
     public static boolean showAnswers;
     public static int chanceSum;
@@ -29,91 +31,74 @@ public class Config {
     public static int enableTriviaCount;
     public static int triviaInterval;
     public static int triviaLength;
+    public static String completionQuestion;
+    public static String completionAnswer;
+    public static String scrambleQuestion;
+    public static String scrambleAnswer;
     public static List<String> enabledPacks = Lists.newArrayList();
     public static Map<String, Integer> rewardCommands = Maps.newHashMap();
 
-    private static boolean initializeConfig() {
+    public static void readConfig() {
         try {
-            Files.createDirectories(coreDir);
-            Path core = coreDir.resolve("triviaquest.core");
-            if (Files.notExists(core)) {
-                Sponge.getAssetManager().getAsset(TriviaQuest.getPlugin(),"triviaquest.core").get().copyToFile(core);
-                TriviaQuest.getPlugin().getLogger().warn("Created main directory and initiated triviaquest.core.");
+            Files.createDirectories(dir);
+            Path core = dir.resolve("triviaquest.core");
+            TriviaQuest.getContainer().getAsset("triviaquest.core").get().copyToFile(core);
+            if (Files.notExists(packs)) {
+                Files.createDirectories(packs);
+                TriviaQuest.getContainer().getAsset("trivia.pack").get().copyToFile(packs.resolve("trivia.pack"));
             }
-            if (Files.notExists(packDir)) {
-                Files.createDirectories(packDir);
-                Sponge.getAssetManager().getAsset(TriviaQuest.getPlugin(), "trivia.pack").get().copyToFile(packDir.resolve("trivia.pack"));
-                TriviaQuest.getPlugin().getLogger().warn("Created pack directory and initiated trivia.pack.");
-            }
-            coreNode = HoconConfigurationLoader.builder().setPath(core).build().load();
-        } catch (IOException e) {
-            TriviaQuest.getPlugin().getLogger().error("Config could not be loaded!");
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean readConfig() {
-        if (initializeConfig()) {
-            try {
-                enabledPacks = coreNode.getNode("enabled-packs").getList(TypeToken.of(String.class));
-            } catch (ObjectMappingException ignored) {
-                TriviaQuest.getPlugin().getLogger().error("Error loading enabled packs list!");
-                return false;
-            }
-            System.out.println(String.join(", ", enabledPacks));
-            enabledPacks.forEach(p -> loadPack(packDir.resolve(p + ".pack")));
-            coreNode.getNode("rewards").getChildrenMap().values().forEach(r -> rewardCommands.put(r.getNode("command").getString(""), r.getNode("chance").getInt(0)));
+            CommentedConfigurationNode root = HoconConfigurationLoader.builder().setPath(core).build().load();
+            enabledPacks = root.getNode("enabled-packs").getChildrenList().stream().map(ConfigurationNode::getString).collect(Collectors.toList());
+            enabledPacks.forEach(p -> loadPack(packs.resolve(p + ".pack")));
+            root.getNode("rewards").getChildrenMap().values().forEach(r -> rewardCommands.put(r.getNode("command").getString(""), r.getNode("chance").getInt(0)));
             chanceSum = rewardCommands.values().stream().mapToInt(Integer::intValue).sum();
-            showAnswers = coreNode.getNode("config", "show-answers").getBoolean(false);
-            enableRewardsCount = coreNode.getNode("config", "enable-rewards-count").getInt(0);
-            enableTriviaCount = coreNode.getNode("config", "enable-trivia-count").getInt(0);
-            triviaInterval = coreNode.getNode("config", "trivia-interval").getInt(300);
-            triviaLength = coreNode.getNode("config", "trivia-length").getInt(30);
+            showAnswers = root.getNode("config", "show-answers").getBoolean(false);
+            enableRewardsCount = root.getNode("config", "enable-rewards-count").getInt(0);
+            enableTriviaCount = root.getNode("config", "enable-trivia-count").getInt(0);
+            triviaInterval = root.getNode("config", "trivia-interval").getInt(300);
+            triviaLength = root.getNode("config", "trivia-length").getInt(30);
             if (triviaInterval < 1 || triviaLength < 1) {
-                TriviaQuest.getPlugin().getLogger().error("Interval and length must be at least 1! | Interval:[" + triviaInterval + "] Length:[" + triviaLength + "]");
-                return false;
+                TriviaQuest.getLogger().error("Interval and length must be at least 1! | Interval:[" + triviaInterval + "] Length:[" + triviaLength + "]");
+                triviaInterval = 300;
+                triviaLength = 30;
             }
-            Trivia.prefix = Util.toText(coreNode.getNode("config", "trivia-prefix").getString("&8&l[&5TriviaQuest&8&l]&f "));
-            if (coreNode.getNode("config", "enable-on-startup").getBoolean(false)) {
+            completionQuestion = root.getNode("config", "completion-question").getString("&fFill in the blanks: <word>");
+            completionAnswer = root.getNode("config", "completion-answer").getString("&fThe word was &d<word>&f!");
+            scrambleQuestion = root.getNode("config", "scramble-question").getString("&fUnscramble the word: <word>");
+            scrambleAnswer = root.getNode("config", "scramble-answer").getString("&fThe word was &d<word>&f!");
+            Trivia.prefix = Util.toText(root.getNode("config", "trivia-prefix").getString("&8&l[&5TriviaQuest&8&l]&f "));
+            if (root.getNode("config", "enable-on-startup").getBoolean(false)) {
                 Trivia.startRunner();
             }
+        } catch (IOException e) {
+            TriviaQuest.getLogger().error("Config could not be loaded!");
+            e.printStackTrace();
         }
-        return false;
     }
 
     public static void loadPack(Path path) {
         if (Files.exists(path)) {
             try {
-                CommentedConfigurationNode packNode = HoconConfigurationLoader.builder().setPath(path).build().load();
-                packNode.getNode("trivia", "completions").getChildrenMap().values().forEach(q -> {
-                    try {
-                        Trivia.triviaList.add(new Completion(q.getNode("word").getString(""), q.getNode("choices").getList(TypeToken.of(String.class))));
-                    } catch (ObjectMappingException ignored) {
-                        TriviaQuest.getPlugin().getLogger().error("Error loading choices list! | Question:[" + q.getKey() + "] Pack:[" + packNode.getKey());
-                    }
-                });
-                packNode.getNode("trivia", "questions").getChildrenMap().values().forEach(q -> {
-                    try {
-                        Trivia.triviaList.add(new Question(q.getNode("question").getString(""), q.getNode("answers").getList(TypeToken.of(String.class))));
-                    } catch (ObjectMappingException ignored) {
-                        TriviaQuest.getPlugin().getLogger().error("Error loading answers list! | Question:[" + q.getKey() + "] Pack:[" + packNode.getKey());
-                    }
-                });
-                packNode.getNode("trivia", "scrambles").getChildrenMap().values().forEach(q -> {
-                    try {
-                        Trivia.triviaList.add(new Scramble(q.getNode("word").getString(""), q.getNode("choices").getList(TypeToken.of(String.class))));
-                    } catch (ObjectMappingException ignored) {
-                        TriviaQuest.getPlugin().getLogger().error("Error loading choices list! | Question:[" + q.getKey() + "] Pack:[" + packNode.getKey());
-                    }
-                });
+                CommentedConfigurationNode node = HoconConfigurationLoader.builder().setPath(path).build().load();
+                node.getNode("trivia", "completions").getChildrenMap().values().forEach(n -> Trivia.triviaList.add(new Completion(n.getNode("word").getString(""), getList(path, n.getNode("choices")))));
+                node.getNode("trivia", "questions").getChildrenMap().values().forEach(n -> Trivia.triviaList.add(new Question(n.getNode("question").getString(""), getList(path, n.getNode("answers")))));
+                node.getNode("trivia", "scrambles").getChildrenMap().values().forEach(n -> Trivia.triviaList.add(new Scramble(n.getNode("word").getString(""), getList(path, n.getNode("choices")))));
             } catch (IOException e) {
-                TriviaQuest.getPlugin().getLogger().error("Pack could not be loaded! | Pack:[" + path.getFileName() + "]");
+                TriviaQuest.getLogger().error("Error loading pack " + path.getFileName() + ".");
                 e.printStackTrace();
             }
         } else {
-            TriviaQuest.getPlugin().getLogger().error("Attempted to load non-existent pack " + path.getFileName() + "!");
+            TriviaQuest.getLogger().error("Attempted to load non-existent pack " + path.getFileName() + ".");
         }
     }
+
+    public static List<String> getList(Path path, ConfigurationNode node) {
+        try {
+            return node.getList(TypeToken.of(String.class));
+        } catch (ObjectMappingException e) {
+            TriviaQuest.getLogger().error("Unable to load list from pack " + path.getFileName() + " at " + Arrays.toString(node.getPath()));
+            return Lists.newArrayList();
+        }
+    }
+
 }

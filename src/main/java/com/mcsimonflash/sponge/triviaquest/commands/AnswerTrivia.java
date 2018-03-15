@@ -13,15 +13,12 @@ public class AnswerTrivia implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        String answer = args.<String>getOne("answer").get();
-
-        if (Trivia.trivia != null) {
-            if (!Trivia.processAnswer(src, answer)) {
-                src.sendMessage(Trivia.prefix.concat(Util.toText("Oh no! That wasn't the answer :(")));
-            }
-            return CommandResult.success();
+        if (Trivia.trivia == null) {
+            throw new CommandException(Util.toText("Oh no! There isn't an active trivia question!"));
+        } else if (!Trivia.processAnswer(src, args.<String>getOne("answer").get())) {
+            src.sendMessage(Trivia.prefix.concat(Util.toText("Oh no! That wasn't the answer :(")));
         }
-        src.sendMessage(Trivia.prefix.concat(Util.toText("Oh no! There isn't an active trivia question!")));
-        return CommandResult.empty();
+        return CommandResult.success();
     }
+
 }
