@@ -15,7 +15,7 @@ public class PostTrivia implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         if (Trivia.trivia != null) {
             throw new CommandException(Util.toText("A trivia question is currently active!"));
-        } else if (Trivia.runnerEnabled) {
+        } else if (Trivia.runnerTask != null) {
             Trivia.runnerTask.cancel();
         }
         Trivia.askQuestion(true);

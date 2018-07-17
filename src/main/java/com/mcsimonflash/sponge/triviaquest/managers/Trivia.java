@@ -20,11 +20,20 @@ public class Trivia {
     public static boolean runnerEnabled = false;
     public static int triviaIndex = 0;
     public static Task runnerTask;
-    public static com.mcsimonflash.sponge.triviaquest.objects.Trivia trivia;
+    public static com.mcsimonflash.sponge.triviaquest.objects.Trivia trivia = null;
     public static List<com.mcsimonflash.sponge.triviaquest.objects.Trivia> triviaList = Lists.newArrayList();
 
     public static void startRunner() {
-        runnerTask = Task.builder().execute(t -> askQuestion(false)).name("TriviaRunner").delay(Config.triviaInterval, TimeUnit.SECONDS).submit(TriviaQuest.getInstance());
+        if (runnerTask != null) {
+            runnerTask.cancel();
+        }
+        runnerTask = Task.builder()
+                .name("TriviaRunner")
+                .execute(t -> {
+                    askQuestion(false);
+                })
+                .delay(Config.triviaInterval, TimeUnit.SECONDS)
+                .submit(TriviaQuest.getInstance());
     }
 
     public static void newQuestion() {
@@ -39,8 +48,10 @@ public class Trivia {
         if (shouldTriviaRun(override) && trivia == null) {
             newQuestion();
             Sponge.getServer().getBroadcastChannel().send(prefix.concat(Util.toText(trivia.getQuestion())));
-            runnerTask = Task.builder().execute(t -> closeQuestion(false)).name("Question").delay(Config.triviaLength, TimeUnit.SECONDS).submit(TriviaQuest.getInstance());
-        } else {
+            runnerTask = Task.builder().execute(t -> {
+                closeQuestion(false);
+            }).name("Question").delay(Config.triviaLength, TimeUnit.SECONDS).submit(TriviaQuest.getInstance());
+        } else if (runnerEnabled) {
             startRunner();
         }
     }
@@ -49,10 +60,10 @@ public class Trivia {
         if (!answered) {
             Sponge.getServer().getBroadcastChannel().send(prefix.concat(Util.toText("Times up! " + (Config.showAnswers ? trivia.getAnswer() : "Better luck next time!"))));
         }
+        trivia = null;
         if (runnerTask != null) {
             runnerTask.cancel();
         }
-        trivia = null;
         if (runnerEnabled) {
             startRunner();
         }

@@ -13,15 +13,9 @@ public class ToggleRunner implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) {
-        if (Trivia.runnerEnabled) {
-            if (Trivia.trivia != null) {
-                Trivia.runnerTask.getConsumer().accept(Trivia.runnerTask);
-            }
-            Trivia.runnerTask.cancel();
-        } else {
+        if (Trivia.runnerEnabled = !Trivia.runnerEnabled) {
             Trivia.startRunner();
         }
-        Trivia.runnerEnabled = !Trivia.runnerEnabled;
         src.sendMessage(Trivia.prefix.concat(Util.toText("The trivia runner has been &d" + (Trivia.runnerEnabled ? "enabled" : "disabled") + "&f!")));
         return CommandResult.success();
     }

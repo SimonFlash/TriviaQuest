@@ -39,6 +39,8 @@ public class Config {
     public static Map<String, Integer> rewardCommands = Maps.newHashMap();
 
     public static void readConfig() {
+        Trivia.trivia = null;
+        Trivia.runnerEnabled = false;
         try {
             Files.createDirectories(dir);
             Path core = dir.resolve("triviaquest.core");
@@ -67,8 +69,11 @@ public class Config {
             scrambleQuestion = root.getNode("config", "scramble-question").getString("&fUnscramble the word: <word>");
             scrambleAnswer = root.getNode("config", "scramble-answer").getString("&fThe word was &d<word>&f!");
             Trivia.prefix = Util.toText(root.getNode("config", "trivia-prefix").getString("&8&l[&5TriviaQuest&8&l]&f "));
-            if (root.getNode("config", "enable-on-startup").getBoolean(false)) {
-                Trivia.startRunner();
+            if (Trivia.triviaList.isEmpty()) {
+                TriviaQuest.getLogger().warn("Trivia list is empty! Adding a silly question.");
+                Trivia.triviaList.add(new Question("Ask a silly question, get a _____ answer.", Lists.newArrayList("silly")));
+            } else if (root.getNode("config", "enable-on-startup").getBoolean(false)) {
+                Trivia.runnerEnabled = true;
             }
         } catch (IOException e) {
             TriviaQuest.getLogger().error("Config could not be loaded!");
