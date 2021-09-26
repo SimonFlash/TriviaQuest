@@ -1,5 +1,7 @@
 package com.mcsimonflash.sponge.triviaquest.objects;
 
+import com.mcsimonflash.sponge.triviaquest.managers.Config;
+
 import java.util.List;
 
 public class Question implements Trivia {
@@ -19,7 +21,7 @@ public class Question implements Trivia {
 
     @Override
     public String getAnswer() {
-        return "The answer" + (Answers.size() > 1 ? "s were " : " was ") + String.join(", ", Answers);
+        return Config.getAnswer.replace("<word>", String.join(", ", Answers));
     }
 
     @Override

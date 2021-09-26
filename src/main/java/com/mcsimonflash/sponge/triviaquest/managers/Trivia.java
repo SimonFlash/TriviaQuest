@@ -1,7 +1,6 @@
 package com.mcsimonflash.sponge.triviaquest.managers;
 
 import com.google.common.collect.Lists;
-
 import com.mcsimonflash.sponge.triviaquest.TriviaQuest;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
@@ -58,7 +57,7 @@ public class Trivia {
 
     public static void closeQuestion(boolean answered) {
         if (!answered) {
-            Sponge.getServer().getBroadcastChannel().send(prefix.concat(Util.toText("Times up! " + (Config.showAnswers ? trivia.getAnswer() : "Better luck next time!"))));
+            Sponge.getServer().getBroadcastChannel().send(prefix.concat(Util.toText(Config.timesUp.replace("<word>", trivia.getAnswer()))));
         }
         trivia = null;
         if (runnerTask != null) {
@@ -80,14 +79,15 @@ public class Trivia {
 
     public static boolean processAnswer(CommandSource src, String answer) {
         if (trivia.checkAnswer(answer)) {
-            Sponge.getServer().getBroadcastChannel().send(prefix.concat(Util.toText("&d" + src.getName() + "&f got it! " + (Config.showAnswers ? trivia.getAnswer() : "Better luck next time!"))));
+
+            Sponge.getServer().getBroadcastChannel().send(prefix.concat(Util.toText(Config.answerCorrect.replace("<player>", src.getName()).replace("<answer>", trivia.getAnswer()))));
             if (Sponge.getServer().getOnlinePlayers().size() >= Config.enableRewardsCount) {
                 String rewardCmd = Util.getReward().orElse(null);
                 if (rewardCmd != null && !rewardCmd.isEmpty()) {
                     if (src instanceof Player) {
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), rewardCmd.replace("<player>", src.getName()));
                     } else {
-                        src.sendMessage(prefix.concat(Util.toText("Sorry! Only a player can receive a reward!")));
+                        src.sendMessage(prefix.concat(Util.toText(Config.onlyPlayerCanReceive)));
                     }
                 }
             }

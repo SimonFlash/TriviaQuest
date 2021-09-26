@@ -35,6 +35,15 @@ public class Config {
     public static String completionAnswer;
     public static String scrambleQuestion;
     public static String scrambleAnswer;
+    public static String answerAlreadyActive;
+    public static String getAnswer;
+    public static String answerCorrect;
+    public static String commandTriviaRunnerEnable;
+    public static String commandTriviaRunnerDisable;
+    public static String commandAnswerTriviaNoActive;
+    public static String commandAnswerTriviaWrongAnswer;
+    public static String onlyPlayerCanReceive;
+    public static String timesUp;
     public static List<String> enabledPacks = Lists.newArrayList();
     public static Map<String, Integer> rewardCommands = Maps.newHashMap();
 
@@ -59,6 +68,18 @@ public class Config {
             enableTriviaCount = root.getNode("config", "enable-trivia-count").getInt(0);
             triviaInterval = root.getNode("config", "trivia-interval").getInt(300);
             triviaLength = root.getNode("config", "trivia-length").getInt(30);
+
+            // messages
+            getAnswer = root.getNode("message", "get-answer").getString("The answer was <word>");
+            answerAlreadyActive = root.getNode("message", "answer-already-active").getString("A trivia question is currently active!");
+            answerCorrect = root.getNode("message", "answer-correct").getString("&d<player>&f got it! The word was <word>.");
+            timesUp = root.getNode("message", "times-up").getString("Times up! The word was <word>, Better luck next time!");
+            onlyPlayerCanReceive = root.getNode("message", "only-player-can-receive").getString("Sorry! Only a player can receive a reward!");
+            commandTriviaRunnerEnable = root.getNode("message", "command-trivia-runner-enable").getString("The trivia runner has been &aEnable&f");
+            commandTriviaRunnerDisable = root.getNode("message", "command-trivia-runner-disable").getString("The trivia runner has been &cDisable&f");
+            commandAnswerTriviaNoActive = root.getNode("message", "command-answer-trivia-no-active").getString("Oh no! There isn't an active trivia question!");
+            commandAnswerTriviaWrongAnswer = root.getNode("message", "command-answer-trivia-wrong-answer").getString("Oh no! That's the wrong answer.");
+
             if (triviaInterval < 1 || triviaLength < 1) {
                 TriviaQuest.getLogger().error("Interval and length must be at least 1! | Interval:[" + triviaInterval + "] Length:[" + triviaLength + "]");
                 triviaInterval = 300;

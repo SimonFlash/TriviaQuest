@@ -1,9 +1,8 @@
 package com.mcsimonflash.sponge.triviaquest.commands;
 
+import com.mcsimonflash.sponge.triviaquest.managers.Config;
 import com.mcsimonflash.sponge.triviaquest.managers.Trivia;
-
 import com.mcsimonflash.sponge.triviaquest.managers.Util;
-import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -16,7 +15,7 @@ public class ToggleRunner implements CommandExecutor {
         if (Trivia.runnerEnabled = !Trivia.runnerEnabled) {
             Trivia.startRunner();
         }
-        src.sendMessage(Trivia.prefix.concat(Util.toText("The trivia runner has been &d" + (Trivia.runnerEnabled ? "enabled" : "disabled") + "&f!")));
+        src.sendMessage(Trivia.prefix.concat(Util.toText(Trivia.runnerEnabled ? Config.commandTriviaRunnerEnable : Config.commandTriviaRunnerDisable)));
         return CommandResult.success();
     }
 

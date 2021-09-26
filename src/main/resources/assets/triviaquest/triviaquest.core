@@ -31,6 +31,21 @@ config {
     # Prefix before trivia messages.
     trivia-prefix="&8&l[&5TriviaQuest&8&l]&f "
 }
+
+message {
+    # (use <word> for the word)
+    get-answer="The answer was <word>"
+    answer-already-active="A trivia question is currently active!"
+    # (use <player> for the player, use <answer> for the answer)
+    answer-correct="&d<player>&f got it! The word was <answer>"
+    only-player-can-receive="Sorry! Only a player can receive a reward!"
+    times-up="Times up! The word was <word>, Better luck next time!"
+    command-trivia-runner-enable="The trivia runner has been &aEnable&f"
+    command-trivia-runner-disable="The trivia runner has been &cDisable&f"
+    command-answer-trivia-no-active="Oh no! There isn't an active trivia question!"
+    command-answer-trivia-wrong-answer="Oh no! That's the wrong answer."
+}
+
 # List of enabled Trivia Packs #
 enabled-packs=[
     "trivia"
